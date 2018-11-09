@@ -133,34 +133,40 @@ A：修改manage.py里的max_matches=1000
 
 A：修改manage.py里的sql语句 'SELECT info_hash,create_time FROM film order by create_time desc limit 100' 里的数量
 
-**dstat -nf    查看网络速度
-free 查看内存剩余
-df -hl  查看磁盘剩余
-ifconfig  查看网络**
+**查看网络速度**
 
+dstat -nf    
+
+**查看内存剩余**
+free  
+
+**查看磁盘剩余**
+df -hl
+
+**查看网络**
+ifconfig
 
 **杀死爬虫**
 ps -ef|grep simdht_worker.py|grep -v grep|awk '{print $2}'|xargs kill -9
+
 **杀死并启动爬虫**
 ps -ef|grep simdht_worker.py|grep -v grep|awk '{print $2}'|xargs kill -9
 cd /root/zsky
 nohup python simdht_worker.py>/root/zsky/spider.log 2>&1&
+
 **手动索引**
 /usr/local/sphinx-jieba/bin/indexer -c /root/zsky/sphinx.conf film --rotate
+
 **手动启动搜索进程**
 /usr/local/sphinx-jieba/bin/searchd --config ~/zsky/sphinx.conf
 
-
-
-**mysql -u root -p**
-mysql登录
-
+**mysql登录**
+mysql -u root -p
 
 **查看爬虫当前线程数**
 ps -ef|grep simdht|awk '{print $2}'|grep -v grep|xargs ps hH |wc -l
 或
 ps -xH|grep simdht|grep -v grep|wc -l
-
 
 **查看服务器硬盘通电时间**
 yum -y install smartmontools
