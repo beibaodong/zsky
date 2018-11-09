@@ -124,3 +124,48 @@ A：程序在开发之初就已经考虑到从这些程序迁移过来的问题�
 **Q：网站经常收到版权投诉，有没有好的解决办法？**
 
 A：除了删除投诉的影片数据外，你可以使用前端Nginx、后端gunicorn+爬虫+数据库+索引在不同主机上的模式，甚至多前端模式，这样 即使前端被主机商强行封机，也能保证后端数据的安全。如果有需求，请加群联系作者付费为你提供服务
+
+Q：怎么修改搜索结果数量，默认1000条太少了
+
+A：修改manage.py里的max_matches=1000
+
+Q：sitemap数量默认是100太少了，怎么修改？
+
+A：修改manage.py里的sql语句 'SELECT info_hash,create_time FROM film order by create_time desc limit 100' 里的数量
+
+dstat -nf    查看网络速度
+free 查看内存剩余
+df -hl  查看磁盘剩余
+ifconfig  查看网络
+
+
+杀死爬虫
+ps -ef|grep simdht_worker.py|grep -v grep|awk '{print $2}'|xargs kill -9
+杀死并启动爬虫
+ps -ef|grep simdht_worker.py|grep -v grep|awk '{print $2}'|xargs kill -9
+cd /root/zsky
+nohup python simdht_worker.py>/root/zsky/spider.log 2>&1&
+手动索引
+/usr/local/sphinx-jieba/bin/indexer -c /root/zsky/sphinx.conf film --rotate
+手动启动搜索进程
+/usr/local/sphinx-jieba/bin/searchd --config ~/zsky/sphinx.conf
+
+
+
+mysql -u root -p
+mysql登录
+
+
+查看爬虫当前线程数
+ps -ef|grep simdht|awk '{print $2}'|grep -v grep|xargs ps hH |wc -l
+或
+ps -xH|grep simdht|grep -v grep|wc -l
+
+查看主机CPU、内存、系统、IO性能、带宽
+wget -qO- bench.sh|bash
+
+查看服务器硬盘通电时间
+yum -y install smartmontools
+smartctl -A /dev/sda
+#结果中的Power_On_Hours就是通电时间，单位为小时
+如果发现通电时间过长，最好找机房商量更换硬盘。
